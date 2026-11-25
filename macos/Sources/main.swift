@@ -43,7 +43,7 @@ struct Config: Codable {
     var temperature: Double = 0.3
     var uiLanguage: String = Config.systemUILanguage   // "de" | "en"
     var appearance: String = "system"        // "system" | "light" | "dark"
-    var menuBarIcon: String = "✍︎"
+    var menuBarIcon: String = "app"          // "app" = Dock icon, or any text/emoji
     var previewFontSize: Double = 14
     var previewFloating: Bool = true
     var showOriginal: Bool = true
@@ -590,7 +590,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         store.refreshModels()
     }
 
-    func updateStatusIcon() { status.button?.title = cfg.menuBarIcon + (busy ? "…" : "") }
+    /// menuBarIcon "app" shows the app (Dock) icon; anything else is shown as text.
+    func updateStatusIcon() {
+        guard let b = status.button else { return }
+        if cfg.menuBarIcon == "app" {
+            let img = NSImage(size: NSSize(width: 18, height: 18), flipped: false) { r in
+                NSApp.applicationIconImage.draw(in: r); return true
+            }
+            b.image = img; b.imagePosition = .imageLeft
+            b.title = busy ? "…" : ""
+        } else {
+            b.image = nil
+            b.title = cfg.menuBarIcon + (busy ? "…" : "")
+        }
+    }
 
     func applyAppearance() {
         switch cfg.appearance {

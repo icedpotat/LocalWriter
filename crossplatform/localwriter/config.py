@@ -128,7 +128,7 @@ DEFAULTS = dict(
     ollamaURL="http://localhost:11434", model="qwen3.5:9b", mode="replace", language="auto",
     languages=["English", "German", "French", "Spanish", "Italian", "Dutch", "Portuguese", "Polish",
                "Turkish", "Russian", "Ukrainian", "Chinese", "Japanese", "Korean", "Arabic"],
-    pickerHotkey="ctrl+alt+space", temperature=0.3, appearance="system", menuBarIcon="✍︎",
+    pickerHotkey="ctrl+alt+space", temperature=0.3, appearance="system", menuBarIcon="app",
     previewFontSize=14.0, previewFloating=True, showOriginal=True,
     featureAI=True, featureSnippets=True, featureVault=True, featureCompare=True,
     snippetsEnabled=True, snippetTrigger="immediate",

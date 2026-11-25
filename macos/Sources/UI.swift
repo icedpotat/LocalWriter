@@ -218,6 +218,10 @@ struct GeneralTab: View {
 
 struct AppearanceTab: View {
     @EnvironmentObject var store: Store
+    let appIconSmall: NSImage = {
+        let i = NSImage(size: NSSize(width: 16, height: 16), flipped: false) { r in NSApp.applicationIconImage.draw(in: r); return true }
+        return i
+    }()
     let icons = ["✍︎", "✎", "✦", "✱", "¶", "Aa", "LW"]
 
     var body: some View {
@@ -227,6 +231,7 @@ struct AppearanceTab: View {
                     Text(L("System")).tag("system"); Text(L("Light")).tag("light"); Text(L("Dark")).tag("dark")
                 }.pickerStyle(.segmented)
                 Picker(L("Menu bar icon"), selection: $store.cfg.menuBarIcon) {
+                    Image(nsImage: appIconSmall).tag("app")
                     ForEach(icons, id: \.self) { Text($0).tag($0) }
                     if !icons.contains(store.cfg.menuBarIcon) { Text(store.cfg.menuBarIcon).tag(store.cfg.menuBarIcon) }
                 }.pickerStyle(.segmented)
