@@ -131,7 +131,7 @@ Don't want to run a downloaded binary? Build it yourself. Every release is built
 [GitHub Actions](.github/workflows/release.yml), and `SHA256SUMS.txt` in each release lets you check that the file you downloaded wasn't changed.
 
 ```sh
-git clone https://github.com/PainteT/LocalWriter.git
+git clone https://github.com/icedpotat/LocalWriter.git
 cd LocalWriter
 ```
 
