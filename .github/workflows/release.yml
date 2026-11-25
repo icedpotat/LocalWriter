@@ -1,0 +1,91 @@
+# Builds LocalWriter for macOS, Windows and Linux.
+# Push a tag like v1.2.0  →  a GitHub Release with downloads for all three is created.
+# Any other push / pull request just checks that everything still builds.
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Build
+        run: cd macos && ./build.sh
+      - name: Package
+        run: |
+          cd macos/build
+          ditto -c -k --keepParent LocalWriter.app ../../LocalWriter-macOS.zip
+      - uses: actions/upload-artifact@v4
+        with: { name: macos, path: LocalWriter-macOS.zip }
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Version
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: echo "__version__ = \"${GITHUB_REF_NAME#v}\"" > crossplatform/localwriter/__init__.py
+      - name: Build
+        run: |
+          pip install -r crossplatform/requirements.txt pyinstaller pillow
+          python crossplatform/build.py
+          Move-Item crossplatform/dist/LocalWriter.exe LocalWriter-Windows.exe
+      - uses: actions/upload-artifact@v4
+        with: { name: windows, path: LocalWriter-Windows.exe }
+
+  linux:
+    runs-on: ubuntu-22.04   # older glibc = runs on more distributions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: echo "__version__ = \"${GITHUB_REF_NAME#v}\"" > crossplatform/localwriter/__init__.py
+      - name: System libraries
+        run: sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxkbcommon-x11-0 libegl1 libdbus-1-3
+      - name: Build
+        run: |
+          pip install -r crossplatform/requirements.txt secretstorage pyinstaller pillow
+          python crossplatform/build.py
+          mkdir LocalWriter-Linux
+          cp crossplatform/dist/LocalWriter LocalWriter-Linux/
+          cp crossplatform/localwriter/icon.png LocalWriter-Linux/localwriter.png
+          cp crossplatform/linux/install.sh LocalWriter-Linux/
+          chmod +x LocalWriter-Linux/LocalWriter LocalWriter-Linux/install.sh
+          tar czf LocalWriter-Linux-x86_64.tar.gz LocalWriter-Linux
+      - uses: actions/upload-artifact@v4
+        with: { name: linux, path: LocalWriter-Linux-x86_64.tar.gz }
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [macos, windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { merge-multiple: true }
+      - name: Checksums
+        run: sha256sum LocalWriter-* > SHA256SUMS.txt && cat SHA256SUMS.txt
+      - uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            LocalWriter-macOS.zip
+            LocalWriter-Windows.exe
+            LocalWriter-Linux-x86_64.tar.gz
+            SHA256SUMS.txt

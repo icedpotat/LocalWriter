@@ -1,0 +1,5 @@
+PySide6-Essentials>=6.7
+pynput>=1.7.7
+keyring>=25
+langdetect>=1.0.9
+pypdf>=4
