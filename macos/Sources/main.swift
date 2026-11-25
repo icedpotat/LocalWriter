@@ -53,6 +53,7 @@ struct Config: Codable {
     var featureSnippets: Bool = true
     var featureVault: Bool = true
     var featureCompare: Bool = true
+    var supportBannerDismissed: Bool = false
     var snippets: [Snippet] = Snippet.examples
     var snippetsEnabled: Bool = true
     var snippetTrigger: String = "immediate"   // "immediate" | "delimiter" (after space/punctuation)
@@ -175,6 +176,7 @@ extension Config {
         featureSnippets = try c.decodeIfPresent(Bool.self, forKey: .featureSnippets) ?? true
         featureVault = try c.decodeIfPresent(Bool.self, forKey: .featureVault) ?? true
         featureCompare = try c.decodeIfPresent(Bool.self, forKey: .featureCompare) ?? true
+        supportBannerDismissed = try c.decodeIfPresent(Bool.self, forKey: .supportBannerDismissed) ?? false
     }
 }
 
@@ -357,6 +359,11 @@ func deliver(_ out: String, _ placement: Placement, kind: String, target: NSRunn
             }
         }
     }
+}
+
+enum Links {
+    static let kofi = URL(string: "https://ko-fi.com/ipotato")!
+    static let website = URL(string: "https://icedpotat.github.io/")!
 }
 
 // MARK: - Ollama
@@ -683,6 +690,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if more.numberOfItems > 0 { more.addItem(.separator()) }
         more.addItem(item(L("Edit config file…"), #selector(openConfig)))
         more.addItem(item(L("Reload config"), #selector(reloadConfig)))
+        more.addItem(.separator())
+        more.addItem(item("☕ " + L("Support LocalWriter on Ko-fi"), #selector(openKofi)))
+        more.addItem(item(L("Website"), #selector(openWebsite)))
         menu.addItem(submenu(L("More"), detail: nil, more))
         let q = item(L("Quit LocalWriter"), #selector(quit)); q.keyEquivalent = "q"
         menu.addItem(q)
@@ -837,6 +847,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func openConfig() { NSWorkspace.shared.open(Config.file) }
     @objc func reloadConfig() { cfg = Config.load(); notify("LocalWriter", L("Config reloaded")) }
     @objc func quit() { NSApp.terminate(nil) }
+    @objc func openKofi() { NSWorkspace.shared.open(Links.kofi) }
+    @objc func openWebsite() { NSWorkspace.shared.open(Links.website) }
 
     // Menu-bar clicks: the menu stole focus, so wait briefly for the previous app to be frontmost again.
     @objc func menuAction(_ s: NSMenuItem) {

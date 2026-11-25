@@ -85,6 +85,7 @@ enum SettingsWindow {
 struct SettingsView: View {
     @EnvironmentObject var store: Store
     var body: some View {
+        VStack(spacing: 0) {
         TabView(selection: $store.tab) {
             GeneralTab().tabItem { Label(L("General"), systemImage: "gearshape") }.tag(SettingsTab.general)
             AppearanceTab().tabItem { Label(L("Appearance"), systemImage: "paintbrush") }.tag(SettingsTab.appearance)
@@ -101,9 +102,44 @@ struct SettingsView: View {
                 CompareTab(vm: store.compare).tabItem { Label(L("Compare"), systemImage: "doc.on.doc") }.tag(SettingsTab.compare)
             }
         }
-        .padding(12)
+        .padding([.horizontal, .top], 12)
+        SupportFooter()
+        }
         .frame(minWidth: 700, minHeight: 520)
         .id(store.cfg.uiLanguage)   // rebuild all labels when the UI language changes
+    }
+}
+
+// MARK: - Support
+
+/// Dismissible Ko-fi banner (top of General). The links stay available in the footer and the menus.
+struct SupportBanner: View {
+    var onClose: () -> Void
+    var body: some View {
+        HStack(spacing: 12) {
+            Text("☕").font(.system(size: 26))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(L("Enjoying LocalWriter?")).font(.headline)
+                Text(L("It's free and open source. A coffee helps keep it going.")).font(.callout).foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(L("Support on Ko-fi")) { NSWorkspace.shared.open(Links.kofi) }.buttonStyle(.borderedProminent)
+            Button { onClose() } label: { Image(systemName: "xmark") }
+                .buttonStyle(.borderless).help(L("Hide this banner"))
+        }
+        .padding(.vertical, 4)
+    }
+}
+
+/// Permanent small links at the bottom of every settings tab.
+struct SupportFooter: View {
+    var body: some View {
+        HStack(spacing: 14) {
+            Spacer()
+            Link("☕ " + L("Support on Ko-fi"), destination: Links.kofi)
+            Link(L("Website"), destination: Links.website)
+        }
+        .font(.callout).padding(.horizontal, 16).padding(.vertical, 8)
     }
 }
 
@@ -116,6 +152,9 @@ struct GeneralTab: View {
 
     var body: some View {
         Form {
+            if !store.cfg.supportBannerDismissed {
+                Section { SupportBanner(onClose: { store.cfg.supportBannerDismissed = true }) }
+            }
             Section(L("Interface")) {
                 Picker(L("App language"), selection: $store.cfg.uiLanguage) {
                     Text("Deutsch").tag("de"); Text("English").tag("en")

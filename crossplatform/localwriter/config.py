@@ -131,7 +131,7 @@ DEFAULTS = dict(
     pickerHotkey="ctrl+alt+space", temperature=0.3, appearance="system", menuBarIcon="app",
     previewFontSize=14.0, previewFloating=True, showOriginal=True,
     featureAI=True, featureSnippets=True, featureVault=True, featureCompare=True,
-    snippetsEnabled=True, snippetTrigger="immediate",
+    supportBannerDismissed=False, snippetsEnabled=True, snippetTrigger="immediate",
     vaultHotkey="ctrl+alt+v", vaultAuthTimeout=20.0, vaultUnlockFor=0.0, vaultMethod="paste",
 )
 

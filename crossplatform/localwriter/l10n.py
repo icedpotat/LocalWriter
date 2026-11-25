@@ -24,6 +24,12 @@ _german.update({
     "LocalWriter is running in the system tray.": "LocalWriter läuft im Infobereich der Taskleiste.",
     "Edit freely · Ctrl+Enter %s · Ctrl+R retry · Esc close": "Frei bearbeitbar · Strg+Enter %s · Strg+R neu erzeugen · Esc schließen",
     "Choose file": "Datei wählen",
+    "Support LocalWriter on Ko-fi": "LocalWriter auf Ko-fi unterstützen",
+    "Support on Ko-fi": "Auf Ko-fi unterstützen",
+    "Website": "Website",
+    "Enjoying LocalWriter?": "Gefällt dir LocalWriter?",
+    "It's free and open source. A coffee helps keep it going.": "Es ist kostenlos und Open Source. Ein Kaffee hilft, es weiterzuentwickeln.",
+    "Hide this banner": "Banner ausblenden",
     "No keyring available. Install gnome-keyring or KWallet.": "Kein Schlüsselbund verfügbar. Bitte gnome-keyring oder KWallet installieren.",
 })
 

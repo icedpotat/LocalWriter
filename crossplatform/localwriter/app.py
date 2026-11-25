@@ -448,6 +448,9 @@ class App:
             if c.featureCompare: act(more, L("Compare files…"), lambda: self.open_settings("compare"))
             act(more, L("Edit config file…"), lambda: plat.open_path(config_file()))
             act(more, L("Reload config"), lambda: (self.reload(), notify("LocalWriter", L("Config reloaded"))))
+            more.addSeparator()
+            act(more, "☕ " + L("Support LocalWriter on Ko-fi"), lambda: plat.open_url(plat.KOFI_URL))
+            act(more, L("Website"), lambda: plat.open_url(plat.WEBSITE_URL))
             if c.featureVault: act(more, L("Lock vault now"), lambda: (self.vault_lock.lock(), notify(L("Vault"), L("Vault locked."))))
             act(m, L("Quit LocalWriter"), self.qapp.quit)
 

@@ -5,6 +5,8 @@ Everything runs on your own computer through [Ollama](https://ollama.com). Nothi
 
 Works on **macOS**, **Windows** and **Linux**. The interface is in English or German.
 
+[![Support me on Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20LocalWriter-FF5E5B?logo=ko-fi&logoColor=white)](https://ko-fi.com/ipotato) [![Website](https://img.shields.io/badge/Website-icedpotat.github.io-555?logo=github)](https://icedpotat.github.io/)
+
 <!-- TODO screenshot: ![Rewriting a sentence with a hotkey](docs/screenshots/demo.gif) -->
 
 | | |
@@ -175,6 +177,10 @@ GitHub Actions builds macOS, Windows and Linux and attaches them to a new releas
 - Your text goes only to the Ollama server you configure (by default `localhost`, i.e. your own computer).
 - No telemetry, no accounts, no network access except to Ollama.
 - Vault secrets stay in your system's keychain.
+
+## Support
+
+LocalWriter is free. If it saves you time, you can [buy me a coffee on Ko-fi](https://ko-fi.com/ipotato) ☕. More projects: [icedpotat.github.io](https://icedpotat.github.io/)
 
 ## License
 

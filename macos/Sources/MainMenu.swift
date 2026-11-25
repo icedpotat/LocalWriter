@@ -79,6 +79,9 @@ final class MainMenu: NSObject {
         // Help
         let help = NSMenu(title: L("Help"))
         help.addItem(item(L("Grant Accessibility access…"), #selector(openAccessibility)))
+        help.addItem(.separator())
+        help.addItem(item("☕ " + L("Support LocalWriter on Ko-fi"), #selector(kofi)))
+        help.addItem(item(L("Website"), #selector(website)))
         add(main, L("Help"), help)
         NSApp.helpMenu = help
 
@@ -95,6 +98,8 @@ final class MainMenu: NSObject {
     @objc func about() { NSApp.activate(ignoringOtherApps: true); NSApp.orderFrontStandardAboutPanel(nil) }
     @objc func settings() { SettingsWindow.show(store.tab) }
     @objc func quit() { NSApp.terminate(nil) }
+    @objc func kofi() { NSWorkspace.shared.open(Links.kofi) }
+    @objc func website() { NSWorkspace.shared.open(Links.website) }
     @objc func showTab(_ s: NSMenuItem) { if let t = s.representedObject as? SettingsTab { SettingsWindow.show(t) } }
     @objc func openConfig() { NSWorkspace.shared.open(Config.file) }
     @objc func revealConfig() { NSWorkspace.shared.activateFileViewerSelecting([Config.file]) }

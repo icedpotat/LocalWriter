@@ -95,6 +95,10 @@ class SettingsWindow(QWidget):
         self.resize(760, 640)
         lay = QVBoxLayout(self)
         self.tabs = QTabWidget(); lay.addWidget(self.tabs)
+        foot = QHBoxLayout(); foot.addStretch()
+        for text, url in [("☕ " + L("Support on Ko-fi"), plat.KOFI_URL), (L("Website"), plat.WEBSITE_URL)]:
+            lk = QLabel(f'<a href="{url}">{text}</a>'); lk.setOpenExternalLinks(True); foot.addWidget(lk)
+        lay.addLayout(foot)
         self.compare_state = {"left": None, "right": None}
         self.refresh()
 
@@ -138,6 +142,8 @@ class SettingsWindow(QWidget):
     # ---- General ----
     def general(self):
         w = QWidget(); v = QVBoxLayout(w); c = self.cfg
+        if not c.supportBannerDismissed:
+            v.addWidget(self.support_banner())
 
         g = QGroupBox(L("Interface")); f = QFormLayout(g)
 
@@ -206,6 +212,18 @@ class SettingsWindow(QWidget):
         f.addWidget(_note(config_file()))
         v.addWidget(g); v.addStretch()
         return w
+
+    def support_banner(self):
+        box = QFrame(); box.setFrameShape(QFrame.StyledPanel)
+        box.setStyleSheet("QFrame { background: rgba(255, 94, 91, 0.12); border-radius: 8px; }")
+        row = QHBoxLayout(box)
+        cup = QLabel("☕"); cup.setStyleSheet("font-size: 26px; background: transparent"); row.addWidget(cup)
+        txt = QLabel(f"<b>{L('Enjoying LocalWriter?')}</b><br>{L("It's free and open source. A coffee helps keep it going.")}")
+        txt.setWordWrap(True); txt.setStyleSheet("background: transparent"); row.addWidget(txt, 1)
+        b = QPushButton(L("Support on Ko-fi")); b.setDefault(True); b.clicked.connect(lambda: plat.open_url(plat.KOFI_URL)); row.addWidget(b)
+        x = QPushButton("✕"); x.setFlat(True); x.setFixedWidth(28); x.setToolTip(L("Hide this banner"))
+        x.clicked.connect(lambda: self.setter("supportBannerDismissed", rebuild=True)(True)); row.addWidget(x)
+        return box
 
     # ---- Appearance ----
     def appearance(self):

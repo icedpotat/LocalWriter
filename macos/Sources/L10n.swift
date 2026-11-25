@@ -282,5 +282,10 @@ let german: [String: String] = [
     "Choose language": "Sprache wählen",
     "Can't paste: Accessibility access is missing or outdated. Remove LocalWriter in System Settings → Privacy & Security → Accessibility, add it again and restart it.":
         "Einfügen nicht möglich: Bedienungshilfen-Zugriff fehlt oder ist veraltet. LocalWriter unter Systemeinstellungen → Datenschutz & Sicherheit → Bedienungshilfen entfernen, neu hinzufügen und neu starten.",
-
+    "Support LocalWriter on Ko-fi": "LocalWriter auf Ko-fi unterstützen",
+    "Support on Ko-fi": "Auf Ko-fi unterstützen",
+    "Website": "Website",
+    "Enjoying LocalWriter?": "Gefällt dir LocalWriter?",
+    "It's free and open source. A coffee helps keep it going.": "Es ist kostenlos und Open Source. Ein Kaffee hilft, es weiterzuentwickeln.",
+    "Hide this banner": "Banner ausblenden",
 ]

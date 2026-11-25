@@ -65,6 +65,15 @@ def is_own_window(win) -> bool:
     return bool(win) and window_pid(win) == os.getpid()
 
 
+KOFI_URL = "https://ko-fi.com/ipotato"
+WEBSITE_URL = "https://icedpotat.github.io/"
+
+
+def open_url(url: str):
+    import webbrowser
+    webbrowser.open(url)
+
+
 def open_path(path: str):
     if IS_WIN:
         os.startfile(path)  # noqa: S606
